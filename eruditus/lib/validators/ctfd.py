@@ -126,7 +126,7 @@ class CTFDTeam(BaseModel):
     oauth_id: Optional[Union[str, int]] = None
     name: str
     score: int
-    members: list[Member]
+    members: Optional[list[Member]] = None
 
     def convert(self) -> Team:
         return Team(id=str(self.account_id), name=self.name, score=self.score)
@@ -136,7 +136,7 @@ class CTFDStanding(BaseModel):
     class Solve(BaseModel):
         challenge_id: Union[int, None]
         account_id: int
-        team_id: int
+        team_id: Optional[int] = None
         user_id: int
         value: int
         date: str

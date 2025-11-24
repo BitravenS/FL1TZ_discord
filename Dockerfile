@@ -62,14 +62,14 @@ USER user
 
 # Prevent caching the subsequent "git clone" layer.
 # https://github.com/moby/moby/issues/1996#issuecomment-1152463036
-ADD http://date.jsontest.com /etc/builddate
+RUN date > ~/builddate
 RUN git clone https://github.com/hfz1337/DiscordChatExporter ~/DiscordChatExporter
 
 ARG CHATLOGS_REPO=git@github.com:username/repo
 
-RUN chmod 0600 ~/.ssh/*
-RUN git clone --depth=1 $CHATLOGS_REPO ~/chatlogs
-RUN git config --global user.email "eruditus@localhost" && \
-    git config --global user.name "eruditus"
+#RUN chmod 0600 ~/.ssh/*
+#RUN git clone --depth=1 $CHATLOGS_REPO ~/chatlogs
+#RUN git config --global user.email "eruditus@localhost" && \
+#    git config --global user.name "eruditus"
 
 ENTRYPOINT ["python3", "-u", "eruditus.py"]

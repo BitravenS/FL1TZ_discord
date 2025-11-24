@@ -15,7 +15,7 @@ and more.
 Be sure to learn the basics of its usage to collaborate effectively with the team 💪
 
 If you find this bot helpful, please ⭐ its [GitHub repository]\
-(https://github.com/hfz1337/Eruditus)!
+(https://github.com/BitravenS/FL1TZ_discord)!
 """,
         "image": None,
     },

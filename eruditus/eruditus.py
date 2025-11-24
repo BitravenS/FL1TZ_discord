@@ -26,6 +26,8 @@ from app_commands.revshell import Revshell
 from app_commands.search import Search
 from app_commands.syscalls import Syscalls
 from app_commands.takenote import TakeNote
+from app_commands.anthem import Anthem
+from handlers import message_handler
 from config import (
     CHALLENGE_COLLECTION,
     CTF_COLLECTION,
@@ -191,6 +193,7 @@ class Eruditus(discord.Client):
         self.tree.add_command(Report())
         self.tree.add_command(Request())
         self.tree.add_command(Search())
+        self.tree.add_command(Anthem(), guild=discord.Object(GUILD_ID))
         self.tree.add_command(Bookmark(), guild=discord.Object(GUILD_ID))
         self.tree.add_command(TakeNote(), guild=discord.Object(GUILD_ID))
         self.tree.add_command(CTF(), guild=discord.Object(GUILD_ID))
@@ -206,7 +209,7 @@ class Eruditus(discord.Client):
         self.scoreboard_updater.start()
         self.challenge_puller.start()
         self.ctftime_team_tracking.start()
-        self.ctftime_leaderboard_tracking.start()
+        #self.ctftime_leaderboard_tracking.start()
 
     async def on_ready(self) -> None:
         for guild in self.guilds:
@@ -218,8 +221,7 @@ class Eruditus(discord.Client):
 
         await self.change_presence(
             activity=discord.Game(
-                name=f"/help ~ {config.COMMIT_HASH:.8} ~ {len(Platform) - 1} platforms "
-                "supported"
+                name=f"Ychedd fel 3alam 🚩"
             )
         )
 
@@ -489,9 +491,9 @@ class Eruditus(discord.Client):
                         event_info = event
                         event_info["name"] = event_info["title"]
                         event_info["website"] = event_info["url"]
-                        event_info[
-                            "prizes"
-                        ] = "Visit the event page for more information."
+                        event_info["prizes"] = (
+                            "Visit the event page for more information."
+                        )
                         event_info["organizers"] = [
                             organizer["name"] for organizer in event_info["organizers"]
                         ]
@@ -556,6 +558,7 @@ class Eruditus(discord.Client):
                         f"⚙️ **Format**\n {event_info['location']} "
                         f"{event_info['format']}\n\n"
                         f"🎯 **Weight**\n{event_info['weight']}"
+                        f"⌛ **Start in**\n<t:{event_start.timestamp():.0f}:R>\n"
                     )
                     parameters = {
                         "name": event_info["name"],
@@ -570,6 +573,7 @@ class Eruditus(discord.Client):
                         ),
                         "start_time": event_start,
                         "end_time": event_end,
+
                         "entity_type": discord.EntityType.external,
                         "image": raw_image,
                         "location": truncate(
@@ -714,9 +718,11 @@ class Eruditus(discord.Client):
                     "\n".join(
                         (
                             challenge.description or "",
-                            f"`{challenge.connection_info}`"
-                            if challenge.connection_info is not None
-                            else "",
+                            (
+                                f"`{challenge.connection_info}`"
+                                if challenge.connection_info is not None
+                                else ""
+                            ),
                         )
                     )
                     or "No description."
@@ -1079,9 +1085,19 @@ class Eruditus(discord.Client):
     async def ctftime_leaderboard_tracking_err_handler(self, _: Exception) -> None:
         traceback.print_exc()
         self.ctftime_leaderboard_tracking.restart()
+    
 
 
 if __name__ == "__main__":
     logger = logging.getLogger("discord.eruditus")
     client = Eruditus()
+
+    @client.event
+    async def on_message(message: discord.Message) -> None:
+        if message.author == client.user:
+            return
+
+        await message_handler(message)
+        
+
     client.run(os.getenv("DISCORD_TOKEN"))

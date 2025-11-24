@@ -17,24 +17,24 @@ class Help(app_commands.Command):
         """Show help about the bot usage."""
         embed = (
             discord.Embed(
-                title="Eruditus - CTF helper bot",
+                title="lfar5 - Official CTF bot for FL1TZ 🐧",
                 url="https://github.com/hfz1337/Eruditus",
                 description=(
-                    "Eruditus is dedicated to CTF teams who communicate via Discord "
-                    "during CTF competitions.\n"
+                    "Lfar5 li (sa3at) ynaggez is dedicated to managing the CTF career of team FL1TZ"
+                    "during and outside CTF competitions.\n"
                     "Currently supported platforms: "
                     f"{', '.join(p.__name__ for p in Platform if p)}.\n"
                     f"Current revision: [`{COMMIT_HASH:.8}`]"
-                    f"(https://github.com/hfz1337/Eruditus/commit/{COMMIT_HASH})."
+                    f"(https://github.com/BitravenS/FL1TZ_discord/commit/{COMMIT_HASH})."
                 ),
                 colour=discord.Colour.blue(),
             )
-            .set_thumbnail(url=interaction.client.user.display_avatar.url)
-            .set_footer(text="Made with ❤️ by hfz/es3n1n.")
+            .set_thumbnail(url=interaction.client.user.display_avatar.url)  # type: ignore
+            .set_footer(text="Made with ❤️ by hfz/es3n1n/Bitraven.")
         )
 
         # Show help for global commands.
-        for command in interaction.client.tree.get_commands():
+        for command in interaction.client.tree.get_commands():  # type: ignore
             # Skip context menu commands.
             if command.__class__.__bases__[0] == discord.app_commands.ContextMenu:
                 continue
@@ -48,7 +48,7 @@ class Help(app_commands.Command):
         # If the command was invoked from within the guild, we also show guild
         # specific commands.
         if interaction.guild:
-            for command in interaction.client.tree.get_commands(
+            for command in interaction.client.tree.get_commands(  # type: ignore
                 guild=discord.Object(id=GUILD_ID)
             ):
                 # Skip context menu commands.
