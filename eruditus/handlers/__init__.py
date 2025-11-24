@@ -1,5 +1,6 @@
 import discord
 import os
+import random
 from config import GHACHA_CHANNEL
 
 
@@ -10,11 +11,19 @@ KEYWORD_RESPONSES = {
     ("bouch", "bocsh", "boush", "bousch"): "ENTA TABBES W HOWA Y5OUCH",
     ("rawa7", "rawwa7"): "TALGEH MLAWA7",
     ("wnos", "noss", " nos "): "TCHEDDOU W TMOSS",
-    ("ah?", "eh?"): "3ASBA"
+    ("ah?", "eh?"): "3ASBA",
+    ("mabloul", "loul "): "TA3MLOU MAFTOUL",
+    ("sa7a", "sa77a"): "YOU7EL FIK MA YETNA77A"
 }
 
+MENTION_RESPONSES = [
+    "Chbih baba?",
+    "7kit m3a ra7mouni?",
+    "Tchedni mennou"
+]
+
 GHACHA_ROOM = os.getenv("GHACHA_CHANNEL","")
-async def message_handler(message: discord.Message) -> None:
+async def message_handler(message: discord.Message, bot: discord.Client) -> None:
     """
     Checks for keywords in a message and sends a corresponding reply.
     """
@@ -37,3 +46,11 @@ async def message_handler(message: discord.Message) -> None:
                 await resp.add_reaction("🤡")
 
             break
+
+    if message.mention_everyone:
+        await message.reply("Arka7 nayyek")
+    
+    # Efficiently check if the bot itself was mentioned
+    elif bot.user in message.mentions:
+        response = random.choice(MENTION_RESPONSES)
+        await message.reply(response)

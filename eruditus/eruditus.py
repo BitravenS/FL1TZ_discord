@@ -13,7 +13,7 @@ from discord.ext import tasks
 
 import config
 from app_commands.bookmark import Bookmark
-from app_commands.cipher import Cipher
+from app_commands.crypto import Crypto
 from app_commands.ctf import CTF
 from app_commands.ctftime import CTFTime
 from app_commands.encoding import Encoding
@@ -189,7 +189,7 @@ class Eruditus(discord.Client):
         self.tree.add_command(Revshell())
         self.tree.add_command(Encoding())
         self.tree.add_command(CTFTime())
-        self.tree.add_command(Cipher())
+        self.tree.add_command(Crypto())
         self.tree.add_command(Report())
         self.tree.add_command(Request())
         self.tree.add_command(Search())
@@ -1097,7 +1097,7 @@ if __name__ == "__main__":
         if message.author == client.user:
             return
 
-        await message_handler(message)
+        await message_handler(message, client)
         
 
     client.run(os.getenv("DISCORD_TOKEN"))
